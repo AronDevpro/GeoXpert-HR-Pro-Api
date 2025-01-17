@@ -8,6 +8,7 @@ import branchRoute from "../features/branch/branch.route.js";
 import authRoute from "../features/auth/auth.route.js";
 import leaveRoute from "../features/leave/leave.route.js";
 import employeeRoute from "../features/employee/employee.route.js";
+import contractRoute from "../features/employeeContract/contract.route.js";
 
 export default {
     leaveTypes:leaveTypeRoute,
@@ -20,4 +21,5 @@ export default {
     employees:employeeRoute,
     auth:authRoute,
     leave:leaveRoute,
+    contract:contractRoute,
 }
