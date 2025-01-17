@@ -8,11 +8,11 @@ const router = express.Router();
 router.get('/', getAllContact);
 
 //api to save
-router.post('/', postContact)
+router.post('/', postContact);
 
 //api to update
-router.put('/:id', putContact)
-//
+router.put('/:id', putContact);
+
 //api to delete
 router.delete('/:id', deleteContact)
 
