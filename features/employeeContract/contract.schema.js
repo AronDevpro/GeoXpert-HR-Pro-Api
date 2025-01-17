@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 const contractSchema = new mongoose.Schema({
-    department:{type: mongoose.Schema.Types.ObjectId, ref: 'department'},
-    designation:{type: mongoose.Schema.Types.ObjectId, ref: 'designation'},
+    department:{type: String, required:true},
+    designation:{type: String, required:true},
     joinDate:{type:Date, default:Date.now,required: true},
-    officeShift:{type: mongoose.Schema.Types.ObjectId,ref:"OfficeShift"},
+    officeShift:{type: String, required:true},
     description:String,
     basicSalary:Number,
     paySlipType:{type:String,required:true,default:"Monthly"},
