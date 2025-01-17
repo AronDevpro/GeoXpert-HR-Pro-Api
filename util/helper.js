@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import {v4 as uuidv4} from 'uuid'
-import {RefreshToken} from "../models/refreshToken.js";
+import {RefreshToken} from "../features/auth/refreshToken.schema.js";
 
 const saltRounds = 10;
 

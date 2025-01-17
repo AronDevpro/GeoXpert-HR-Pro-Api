@@ -1,4 +1,4 @@
-import {Employee} from "../models/employee.js";
+import {Employee} from "../features/employee/employee.schema.js";
 import PassportJWT from "passport-jwt";
 import config from "./config.js";
 import passport from "passport";
