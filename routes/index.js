@@ -1,12 +1,13 @@
-import leaveTypeRoute from "./leaveTypeRoute.js";
-import officeShiftRoute from "./officeShiftRoute.js";
-import designationRoute from "./designationRoute.js";
-import departmentRoute from "./departmentRoute.js";
-import holidayRoute from "./holidayRoute.js";
-import contactRoute from "./contactRoute.js";
-import branchRoute from "./branchRoute.js";
-import employeeRoute from "./employeeRoute.js";
-import authRoute from "./authRoute.js";
+import leaveTypeRoute from "../features/leaveType/leaveType.route.js";
+import officeShiftRoute from "../features/officeShift/officeShift.route.js";
+import designationRoute from "../features/designation/designation.route.js";
+import departmentRoute from "../features/department/department.route.js";
+import holidayRoute from "../features/holiday/holiday.route.js";
+import contactRoute from "../features/contact/contact.route.js";
+import branchRoute from "../features/branch/branch.route.js";
+import authRoute from "../features/auth/auth.route.js";
+import leaveRoute from "../features/leave/leave.route.js";
+import employeeRoute from "../features/employee/employee.route.js";
 
 export default {
     leaveTypes:leaveTypeRoute,
@@ -18,4 +19,5 @@ export default {
     branches:branchRoute,
     employees:employeeRoute,
     auth:authRoute,
+    leave:leaveRoute,
 }

@@ -15,6 +15,9 @@ app.use('/api/leaveTypes', passport.authenticate('jwt', {session: false}),routes
 app.use('/api/branches', routes.branches);
 app.use('/api/employees', routes.employees);
 app.use('/api/officeShifts', routes.officeShifts);
+app.use('/api/designations', routes.designations);
+app.use('/api/holidays', routes.holidays);
+app.use('/api/leaves', routes.leave);
 app.use('/api/auth', routes.auth);
 
 // Start the server
