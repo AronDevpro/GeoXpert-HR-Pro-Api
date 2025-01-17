@@ -1,5 +1,11 @@
 import express from "express";
-import {deleteContracts, getAllContracts, postContracts, putContracts} from "./contract.controller.js";
+import {
+    deleteContracts,
+    getAllContracts,
+    postContracts,
+    putContracts,
+    terminateContact
+} from "./contract.controller.js";
 
 //creating a router
 const router = express.Router();
@@ -8,11 +14,14 @@ const router = express.Router();
 router.get('/', getAllContracts);
 
 //api to save
-router.post('/', postContracts)
+router.post('/', postContracts);
 
 //api to update
-router.put('/:id', putContracts)
-//
+router.put('/:id', putContracts);
+
+// terminate contract
+router.put('/terminate:id', terminateContact);
+
 //api to delete
 router.delete('/:id', deleteContracts)
 

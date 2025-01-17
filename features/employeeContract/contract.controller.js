@@ -1,5 +1,6 @@
 import {create, getAll, remove, update} from "../../service/commonCrud.js";
 import {Contracts} from "./contract.schema.js";
+import {terminateContract} from "./contract.service.js";
 
 const model = Contracts
 
@@ -26,6 +27,16 @@ export const putContracts = async (req, res) => {
         const id = req.params.id
         const Contracts = await update(model,id,req.body);
         res.status(200).json({ data: Contracts , message: "Data Updated." });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const terminateContact = async (req, res) => {
+    try {
+        const id = req.params.id
+        const Contact = await terminateContract(id);
+        res.status(200).json({ data: Contact , message: "Data Updated." });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
