@@ -7,6 +7,40 @@ export const getAll = async (model) => {
     }
 };
 
+// fetch by search
+export const search = async (model,data) => {
+    try {
+        const search = data.search || '';
+        const page = parseInt(data.page, 10) || 1;
+        const limit = parseInt(data.limit, 10) || 10;
+        const startIndex = (page - 1) * limit;
+
+        const query = {
+            $or: [
+                { status: { $regex: '^ACTIVE$', $options: 'i' } },
+                { status: { $regex: '^INACTIVE$', $options: 'i' } },
+                { status: { $regex: '^PENDING$', $options: 'i' } },
+                { status: { $regex: '^REJECTED$', $options: 'i' } },
+                { status: { $regex: '^approved$', $options: 'i' } }
+            ],
+        };
+
+        if (search) {
+            query.name = { $regex: search, $options: 'i' };
+        }
+
+        const totalSize = await model.countDocuments(query);
+
+        const list =  await model.find(query)
+            .skip(startIndex)
+            .limit(limit);
+        const totalPages = Math.ceil((totalSize || 0) / limit);
+        return { totalPages, content: list };
+    } catch (error) {
+        throw new Error(`Error fetching all records: ${error.message}`);
+    }
+};
+
 // Create a new document
 export const create = async (model, data) => {
     try {
@@ -47,5 +81,16 @@ export const remove = async (model, id) => {
         return item;
     } catch (error) {
         throw new Error(`Error deleting record: ${error.message}`);
+    }
+};
+
+// soft delete
+export const softDelete = async (model,id) => {
+    try {
+        const item = await model.findByIdAndUpdate(id, { status: 'DELETED' }, { new: true });
+        if (!item) throw new Error('Item not found');
+        return item;
+    } catch (error) {
+        throw new Error(`Error updating record: ${error.message}`);
     }
 };
