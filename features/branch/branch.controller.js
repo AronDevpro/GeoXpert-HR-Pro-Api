@@ -1,8 +1,6 @@
-import {create, getAll, remove, update} from "../../service/commonCrud.js";
+import {remove, update} from "../../service/commonCrud.js";
 import {Branch} from "./branch.schema.js";
-import {Contact} from "../contact/contact.schema.js";
 import {createBranch, getAllBranches} from "./branch.service.js";
-import {populate} from "dotenv";
 
 const model = Branch
 

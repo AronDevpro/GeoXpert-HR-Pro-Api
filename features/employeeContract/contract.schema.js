@@ -1,4 +1,4 @@
-import mongoose, {Mongoose} from "mongoose";
+import mongoose from "mongoose";
 
 const contractSchema = new mongoose.Schema({
     department:{type: mongoose.Schema.Types.ObjectId, ref: 'department'},
