@@ -1,12 +1,13 @@
-import {create, getAll, remove, update} from "../../service/commonCrud.js";
+import {create, remove, update} from "../../service/commonCrud.js";
 import {Contracts} from "./contract.schema.js";
-import {terminateContract} from "./contract.service.js";
+import {createContract, getContractsById, terminateContract} from "./contract.service.js";
 
 const model = Contracts
 
-export const getAllContracts = async (req, res) => {
+export const getAllContractsByEmpId = async (req, res) => {
     try {
-        const Contracts = await getAll(model);
+        const id = req.params.id
+        const Contracts = await getContractsById(id);
         res.status(200).json(Contracts);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -15,7 +16,7 @@ export const getAllContracts = async (req, res) => {
 
 export const postContracts = async (req, res) => {
     try {
-        const Contracts = await create(model,req.body);
+        const Contracts = await createContract(req.body);
         res.status(201).json({data:Contracts, message: "Data Updated." });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -34,7 +35,7 @@ export const putContracts = async (req, res) => {
 
 export const terminateContact = async (req, res) => {
     try {
-        const id = req.params.id
+        const id = req.params.id;
         const Contact = await terminateContract(id);
         res.status(200).json({ data: Contact , message: "Data Updated." });
     } catch (error) {
