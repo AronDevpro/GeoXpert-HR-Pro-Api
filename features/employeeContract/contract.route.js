@@ -1,7 +1,7 @@
 import express from "express";
 import {
     deleteContracts,
-    getAllContracts,
+    getAllContractsByEmpId,
     postContracts,
     putContracts,
     terminateContact
@@ -10,8 +10,8 @@ import {
 //creating a router
 const router = express.Router();
 
-//api to get all the data
-router.get('/', getAllContracts);
+//api to get all the data by emp id
+router.get('/:id', getAllContractsByEmpId);
 
 //api to save
 router.post('/', postContracts);
@@ -20,7 +20,7 @@ router.post('/', postContracts);
 router.put('/:id', putContracts);
 
 // terminate contract
-router.put('/terminate:id', terminateContact);
+router.put('/terminate/:id', terminateContact);
 
 //api to delete
 router.delete('/:id', deleteContracts)

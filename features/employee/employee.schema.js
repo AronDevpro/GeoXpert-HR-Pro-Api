@@ -16,7 +16,12 @@ const employee = new mongoose.Schema({
     nic:String,
     religion:String,
     contact:{type:mongoose.Schema.Types.ObjectId,ref:"Contact"},
-    status:{type:String,required:true,default:"Active"},
+    status:{type:String,required:true,enum: ["Active", "Suspended", "Terminated", "Deleted"],default:"Active"},
+    currentContract:{type:mongoose.Schema.Types.ObjectId,ref:"Contracts"},
+    branch: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
+    role: { type: String, enum: ["Employee", "Manager", "Admin", "CEO" , "Director" ], default: "Employee" },
+    paymentProfile:{ type: mongoose.Schema.Types.ObjectId, ref: "PaymentProfile", required: true },
+    photo:String,
 },{timestamps:true});
 
 employee.set('toJSON', {

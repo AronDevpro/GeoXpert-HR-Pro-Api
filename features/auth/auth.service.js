@@ -4,7 +4,7 @@ import {RefreshToken} from "./refreshToken.schema.js";
 
 export const login = async (data) => {
     const { email, password } = data;
-    const user = await Employee.findOne({ email });
+    const user = await Employee.findOne({ email }).populate('branch');
 
     if (!user) {
         throw new Error('Invalid email');

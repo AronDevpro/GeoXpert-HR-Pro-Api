@@ -19,6 +19,8 @@ app.use('/api/designations', routes.designations);
 app.use('/api/holidays', routes.holidays);
 app.use('/api/leaves', routes.leave);
 app.use('/api/employeeContracts', routes.contract);
+app.use('/api/paymentProfiles', routes.paymentProfile);
+app.use('/api/departments', routes.departments);
 app.use('/api/auth', routes.auth);
 
 // Start the server

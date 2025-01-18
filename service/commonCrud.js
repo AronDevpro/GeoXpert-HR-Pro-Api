@@ -94,3 +94,14 @@ export const softDelete = async (model,id) => {
         throw new Error(`Error updating record: ${error.message}`);
     }
 };
+
+//change status
+export const statusChange = async (model,id,data) => {
+    try {
+        const item = await model.findByIdAndUpdate(id, { status:data.status }, { new: true });
+        if (!item) throw new Error('Item not found');
+        return item;
+    } catch (error) {
+        throw new Error(`Error updating record: ${error.message}`);
+    }
+};

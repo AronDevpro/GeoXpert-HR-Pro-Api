@@ -19,6 +19,9 @@ export function generateAccessToken(user){
     const payload = {
         id: user._id,
         email: user.email,
+        branch:user.branch,
+        status: user.status,
+        role: user.role,
     }
     return jwt.sign(payload,config.secretKey,{ expiresIn: 60 * 2})
 }
