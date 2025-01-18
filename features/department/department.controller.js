@@ -1,11 +1,11 @@
-import {create, getAll, remove, update} from "../../service/commonCrud.js";
+import {create, remove, search, softDelete, update} from "../../service/commonCrud.js";
 import {Department} from "./department.schema.js";
 
 const model = Department
 
 export const getAllDepartment = async (req, res) => {
     try {
-        const Department = await getAll(model);
+        const Department = await search(model, req.query);
         res.status(200).json(Department);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -33,7 +33,7 @@ export const putDepartment = async (req, res) => {
 
 export const deleteDepartment = async (req, res) => {
     try {
-        await remove(model,req.params.id);
+        await softDelete(model,req.params.id);
         res.status(200).json({ message: "Data Deleted." });
     } catch (error) {
         res.status(500).json({ message: error.message });
