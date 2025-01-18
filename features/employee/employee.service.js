@@ -137,10 +137,8 @@ export const searchAllEmployees = async (data) => {
 
         const statusConditions = [
             { status: { $regex: '^ACTIVE$', $options: 'i' } },
-            { status: { $regex: '^INACTIVE$', $options: 'i' } },
-            { status: { $regex: '^PENDING$', $options: 'i' } },
-            { status: { $regex: '^REJECTED$', $options: 'i' } },
-            { status: { $regex: '^approved$', $options: 'i' } }
+            { status: { $regex: '^SUSPENDED$', $options: 'i' } },
+            { status: { $regex: '^TERMINATED$', $options: 'i' } },
         ];
 
         const searchConditions = search
