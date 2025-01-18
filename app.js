@@ -12,15 +12,15 @@ app.use(express.json());
 
 // route
 app.use('/api/leaveTypes', passport.authenticate('jwt', {session: false}),routes.leaveTypes);
-app.use('/api/branches', routes.branches);
+app.use('/api/branches',passport.authenticate('jwt', {session: false}), routes.branches);
 app.use('/api/employees', routes.employees);
-app.use('/api/officeShifts', routes.officeShifts);
-app.use('/api/designations', routes.designations);
-app.use('/api/holidays', routes.holidays);
-app.use('/api/leaves', routes.leave);
-app.use('/api/employeeContracts', routes.contract);
-app.use('/api/paymentProfiles', routes.paymentProfile);
-app.use('/api/departments', routes.departments);
+app.use('/api/officeShifts',passport.authenticate('jwt', {session: false}), routes.officeShifts);
+app.use('/api/designations',passport.authenticate('jwt', {session: false}), routes.designations);
+app.use('/api/holidays',passport.authenticate('jwt', {session: false}), routes.holidays);
+app.use('/api/leaves',passport.authenticate('jwt', {session: false}), routes.leave);
+app.use('/api/employeeContracts',passport.authenticate('jwt', {session: false}), routes.contract);
+app.use('/api/paymentProfiles',passport.authenticate('jwt', {session: false}), routes.paymentProfile);
+app.use('/api/departments',passport.authenticate('jwt', {session: false}), routes.departments);
 app.use('/api/auth', routes.auth);
 
 // Start the server
