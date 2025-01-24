@@ -24,6 +24,8 @@ export const getAllActiveBranch = async (req, res) => {
 
 export const postBranch = async (req, res) => {
     try {
+        console.log(req.body);
+
         const Branch = await createBranch(req.body);
         res.status(201).json({data:Branch, message: "Data Updated." });
     } catch (error) {

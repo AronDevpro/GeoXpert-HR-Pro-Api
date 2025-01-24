@@ -18,12 +18,13 @@ async function comparePassword(password, hashPassword) {
 export function generateAccessToken(user){
     const payload = {
         id: user._id,
+        name: user.firstName,
         email: user.email,
         branch:user.branch,
         status: user.status,
         role: user.role,
     }
-    return jwt.sign(payload,config.secretKey,{ expiresIn: 60 * 2})
+    return jwt.sign(payload,config.secretKey,{ expiresIn: '24H'})
 }
 
 export async function generateRefreshToken(userId) {
