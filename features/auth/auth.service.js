@@ -29,7 +29,13 @@ export const newRefreshToken = async (data) => {
     const { refreshToken: refreshTokenUUID } = data;
     const refreshToken = await RefreshToken.findOne({
         token: refreshTokenUUID,
-    }).populate("user");
+    }).populate({
+        path: "user",
+        populate: {
+            path: "branch",
+            model: "Branch"
+        }
+    });
 
     if (!refreshToken) {
         throw new Error('Invalid refresh token');

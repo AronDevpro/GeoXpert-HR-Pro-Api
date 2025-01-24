@@ -64,6 +64,10 @@ export const updateEmployee = async (id, data) => {
             }
         }
 
+        if (data.password){
+            employee.password = await helper.hashPassword(data.password);
+        }
+
         return await employee.save();
     } catch (error) {
         throw new Error(`Error updating employee record: ${error.message}`);

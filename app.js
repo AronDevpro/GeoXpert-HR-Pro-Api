@@ -12,7 +12,7 @@ app.use(express.json());
 
 // route
 app.use('/api/leaveTypes', passport.authenticate('jwt', {session: false}),routes.leaveTypes);
-app.use('/api/branches',passport.authenticate('jwt', {session: false}), routes.branches);
+app.use('/api/branches', routes.branches);
 app.use('/api/employees', routes.employees);
 app.use('/api/officeShifts',passport.authenticate('jwt', {session: false}), routes.officeShifts);
 app.use('/api/designations',passport.authenticate('jwt', {session: false}), routes.designations);
@@ -21,6 +21,8 @@ app.use('/api/leaves',passport.authenticate('jwt', {session: false}), routes.lea
 app.use('/api/employeeContracts',passport.authenticate('jwt', {session: false}), routes.contract);
 app.use('/api/paymentProfiles',passport.authenticate('jwt', {session: false}), routes.paymentProfile);
 app.use('/api/departments',passport.authenticate('jwt', {session: false}), routes.departments);
+app.use('/api/attendances', routes.attendances);
+app.use('/api/locations', routes.locations);
 app.use('/api/auth', routes.auth);
 
 // Start the server

@@ -71,9 +71,11 @@ export const updateBranch = async (id, data) => {
     try {
         const item = await Branch.findByIdAndUpdate(id, data, {new: true});
         if (!item) throw new Error('Branch not found');
+
         const contactData = new Contact(data.contact);
         const contact = await Contact.findByIdAndUpdate(contactData._id, contactData, {new: true});
         if (!contact) throw new Error('Contact not found');
+
         return item;
     } catch (error) {
         throw new Error(`Error updating record: ${error.message}`);

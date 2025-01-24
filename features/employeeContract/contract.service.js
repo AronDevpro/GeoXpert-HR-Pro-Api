@@ -24,7 +24,7 @@ export const terminateContract = async (id) => {
 //get contracts by employee id
 export const getContractsById = async (id) => {
     try {
-        return await Contracts.find({employeeId: id});
+        return await Contracts.find({employeeId: id}).populate('officeShift');
     } catch (error) {
         throw new Error(`Error fetching contracts: ${error.message}`);
     }

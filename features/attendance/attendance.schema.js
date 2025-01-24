@@ -1,12 +1,24 @@
 import mongoose from "mongoose";
 
 const attendanceSchema = new mongoose.Schema({
-    startTime: Date,
-    endTime: Date,
     totalHours: Number,
-    isLate: Boolean,
-    isEarlyLeaving: Boolean,
-    status:{type:String,default:"Active"},
+    clockIn:{
+        time: String,
+        isLate: Boolean,
+        longitude:String,
+        latitude:String,
+        status:{type:String,enum:["Normal","Supervisor"],default:"Normal"},
+    },
+    clockOut:{
+        time: String,
+        isEarlyLeaving: Boolean,
+        isSystemClose:Boolean,
+        longitude:String,
+        latitude:String,
+        status:{type:String,enum:["Normal","Supervisor","System Closed"],default:"Normal"},
+    },
+    status:{type:String,enum:["Normal","Supervisor"],default:"Normal"},
+    empId:{type:mongoose.Schema.Types.ObjectId, ref:"Employee"},
 },{timestamps:true});
 
-export const AttendanceSchema = mongoose.model('AttendanceSchema', attendanceSchema);
+export const Attendance = mongoose.model('Attendance', attendanceSchema);

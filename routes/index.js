@@ -10,6 +10,8 @@ import leaveRoute from "../features/leave/leave.route.js";
 import employeeRoute from "../features/employee/employee.route.js";
 import contractRoute from "../features/employeeContract/contract.route.js";
 import paymentProfileRoute from "../features/paymentProfile/paymentProfile.route.js";
+import attendanceRoute from "../features/attendance/attendance.route.js";
+import locationRoute from "../features/location/location.route.js";
 
 export default {
     leaveTypes:leaveTypeRoute,
@@ -24,4 +26,6 @@ export default {
     leave:leaveRoute,
     contract:contractRoute,
     paymentProfile: paymentProfileRoute,
+    attendances:attendanceRoute,
+    locations:locationRoute,
 }
