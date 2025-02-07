@@ -4,7 +4,10 @@ import {RefreshToken} from "./refreshToken.schema.js";
 
 export const login = async (data) => {
     const { email, password } = data;
-    const user = await Employee.findOne({ email }).populate('branch');
+    const user = await Employee.findOne({ email }).populate('branch').populate({
+        path: 'currentContract',
+        populate: { path: 'officeShift', model: 'OfficeShift' },
+    });
 
     if (!user) {
         throw new Error('Invalid email');
@@ -27,15 +30,19 @@ export const login = async (data) => {
 
 export const newRefreshToken = async (data) => {
     const { refreshToken: refreshTokenUUID } = data;
-    const refreshToken = await RefreshToken.findOne({
-        token: refreshTokenUUID,
-    }).populate({
-        path: "user",
-        populate: {
-            path: "branch",
-            model: "Branch"
-        }
-    });
+    const refreshToken = await RefreshToken.findOne({ token: refreshTokenUUID })
+        .populate('user')
+        .populate({
+            path: 'user',
+            populate: { path: 'branch', model: 'Branch' },
+        })
+        .populate({
+            path: 'user',
+            populate: {
+                path: 'currentContract',
+                populate: { path: 'officeShift', model: 'OfficeShift' },
+            },
+        });
 
     if (!refreshToken) {
         throw new Error('Invalid refresh token');

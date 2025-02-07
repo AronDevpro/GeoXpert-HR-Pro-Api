@@ -1,4 +1,3 @@
-import {create, update} from "../../service/commonCrud.js";
 import {Attendance} from "./attendance.schema.js";
 import {createAttendanceRecord, getEmpAttendanceById, updateAttendanceRecord} from "./attendance.service.js";
 
