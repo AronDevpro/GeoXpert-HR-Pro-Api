@@ -16,11 +16,11 @@ jobs:
       - name: SSH Deploy to Server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.AAPANEL_HOST }}
+          username: ${{ secrets.AAPANEL_USERNAME }}
+          key: ${{ secrets.AAPANEL_SSH_KEY }}
           script: |
-            cd /www/wwwroot/your-project
+            cd /www/wwwroot/geo
             git pull origin main
             npm install --production
             pm2 restart my-backend
