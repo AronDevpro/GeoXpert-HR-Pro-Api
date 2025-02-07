@@ -23,6 +23,7 @@ export function generateAccessToken(user){
         branch:user.branch,
         status: user.status,
         role: user.role,
+        contract:user.currentContract
     }
     return jwt.sign(payload,config.secretKey,{ expiresIn: '24H'})
 }
