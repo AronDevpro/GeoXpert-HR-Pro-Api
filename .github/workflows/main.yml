@@ -18,7 +18,7 @@ jobs:
         with:
           host: ${{ secrets.AAPANEL_HOST }}
           username: ${{ secrets.AAPANEL_USERNAME }}
-          key: ${{ secrets.AAPANEL_SSH_KEY }}
+          password: ${{ secrets.AAPANEL_SSH_KEY }}
           script: |
             cd /www/wwwroot/geo
             git pull origin main
