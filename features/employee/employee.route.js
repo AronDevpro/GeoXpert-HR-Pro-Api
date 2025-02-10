@@ -2,11 +2,11 @@ import express from "express";
 import {
     changeEmployeeStatus,
     deleteEmployee,
-    getAllEmployees,
+    getAllEmployees, getEmployeeByEmpNo,
     getEmployeeById,
     postEmployee,
     putEmployee,
-    searchAllEmployeesBasedOnBranch
+    searchAllEmployeesBasedOnBranch, searchAllEmployeesBasedOnBranchWithContract
 } from "./employee.controller.js";
 
 //creating a router
@@ -17,9 +17,11 @@ router.get('/', getAllEmployees);
 
 //api to get all the data
 router.get('/search', searchAllEmployeesBasedOnBranch);
+router.get('/payroll/search', searchAllEmployeesBasedOnBranchWithContract);
 
 // gte by id
-router.get('/:id', getEmployeeById);
+router.get('/empById/:id', getEmployeeById);
+router.get('/:id', getEmployeeByEmpNo);
 
 //api to save
 router.post('/', postEmployee)

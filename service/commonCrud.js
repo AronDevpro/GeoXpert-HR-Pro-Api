@@ -8,7 +8,7 @@ export const getAll = async (model) => {
 };
 
 // fetch by search
-export const search = async (model,data) => {
+export const search = async (model,data,sort="asc") => {
     try {
         const search = data.search || '';
         const page = parseInt(data.page, 10) || 1;
@@ -21,7 +21,10 @@ export const search = async (model,data) => {
                 { status: { $regex: '^INACTIVE$', $options: 'i' } },
                 { status: { $regex: '^PENDING$', $options: 'i' } },
                 { status: { $regex: '^REJECTED$', $options: 'i' } },
-                { status: { $regex: '^approved$', $options: 'i' } }
+                { status: { $regex: '^approved$', $options: 'i' } },
+                { status: { $regex: '^Processing$', $options: 'i' } },
+                { status: { $regex: '^Generated$', $options: 'i' } },
+                { status: { $regex: '^Failed$', $options: 'i' } },
             ],
         };
 
@@ -31,9 +34,18 @@ export const search = async (model,data) => {
 
         const totalSize = await model.countDocuments(query);
 
-        const list =  await model.find(query)
-            .skip(startIndex)
-            .limit(limit);
+        let list;
+        if(sort==="asc"){
+            list =  await model.find(query)
+                .skip(startIndex)
+                .limit(limit)
+        } else {
+            list =  await model.find(query)
+                .skip(startIndex)
+                .limit(limit)
+                .sort({ createdAt: -1 });
+        }
+
         const totalPages = Math.ceil((totalSize || 0) / limit);
         return { totalPages, content: list };
     } catch (error) {

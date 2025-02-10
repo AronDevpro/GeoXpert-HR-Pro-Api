@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import * as path from "node:path";
 
 
 export const transporter = nodemailer.createTransport({
@@ -20,6 +21,30 @@ export const sendEmail = async (to, subject, htmlContent) => {
             html: htmlContent
         };
         return await transporter.sendMail(mailOptions);
+    } catch (error) {
+        console.error('Error sending email:', error);
+        throw error;
+    }
+};
+
+export const sendEmailWithAttachment = async (to, subject, text, pdfPath) => {
+    try {
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to,
+            subject,
+            text,
+            attachments: [
+                {
+                    filename: path.basename(pdfPath),
+                    path: pdfPath,
+                    contentType: 'application/pdf'
+                }
+            ]
+        };
+
+        // Send email
+        await transporter.sendMail(mailOptions);
     } catch (error) {
         console.error('Error sending email:', error);
         throw error;
