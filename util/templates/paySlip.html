@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pay Slip - GeoXpert HR</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      padding: 10px;
+    }
+    .header h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .header span {
+      display: block;
+      font-size: 16px;
+      color: #666;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .grid-container > div {
+      padding: 8px;
+    }
+    .employee-info {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .employee-info button {
+      background-color: #f44336;
+      border: none;
+      border-radius: 50%;
+      height: 40px;
+      width: 40px;
+      cursor: pointer;
+    }
+    .employee-info button .avatar {
+      background-color: #ffffff;
+      border-radius: 50%;
+      height: 100%;
+      width: 100%;
+      background-image: url('https://via.placeholder.com/40');
+      background-size: cover;
+    }
+    .employee-info .name {
+      font-size: 14px;
+      font-weight: bold;
+      color: #1d2d50;
+    }
+    .employee-info .email {
+      font-size: 10px;
+      color: #999;
+    }
+    .pay-period, .employee-details {
+      text-align: center;
+    }
+    .pay-period span, .employee-details span {
+      display: block;
+      font-size: 12px;
+    }
+    .pay-period .period {
+      font-size: 14px;
+      color: #000;
+    }
+    .salary-info {
+      margin-top: 20px;
+    }
+    .salary-info .info {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .salary-info .info span {
+      font-size: 14px;
+    }
+    .allowance, .deduction {
+      padding-left: 20px;
+    }
+    .allowance .item, .deduction .item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 5px 0;
+      color: #555;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: 1fr; /* Stack all items on smaller screens */
+        gap: 10px;
+      }
+      .employee-info {
+        flex-direction: column; /* Stack avatar and info vertically */
+        align-items: flex-start;
+      }
+      .pay-period, .employee-details {
+        text-align: left;
+      }
+      .salary-info .info {
+        flex-direction: column; /* Stack salary items vertically */
+        align-items: flex-start;
+      }
+      .allowance, .deduction {
+        padding-left: 0; /* Remove padding for better mobile layout */
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header Section -->
+  <div class="header">
+    <h3>GeoXpert HR Pro</h3>
+    <span>Pay Slip</span>
+  </div>
+
+  <!-- Grid Layout for Employee Info -->
+  <div class="grid-container">
+    <div class="employee-info">
+      <div class="avatar"></div>
+      <div>
+        <span class="name">{{name}}</span><br>
+        <span class="email">{{email}}</span>
+      </div>
+    </div>
+
+    <div class="pay-period">
+      <span>Period:</span>
+      <span class="period">{{period}}</span>
+    </div>
+
+    <div class="employee-details">
+      <span>Designation: {{designation}}</span>
+      <span>Department: {{department}}</span>
+    </div>
+  </div>
+
+  <!-- Salary Details -->
+  <div class="salary-info">
+    <div class="info">
+      <span>Basic Salary</span>
+      <span>{{basicSalary}}</span>
+    </div>
+
+    <!-- Allowance Section -->
+    <div class="allowance">
+      <div class="info">
+        <span>Allowance Total</span>
+        <span>{{allowanceTotal}}</span>
+      </div>
+      {{allowances}} <!-- Dynamic allowance items go here -->
+    </div>
+
+    <!-- Deduction Section -->
+    <div class="deduction">
+      <div class="info">
+        <span>Deduction Total</span>
+        <span>{{deductionTotal}}</span>
+      </div>
+      {{deductions}} <!-- Dynamic deduction items go here -->
+    </div>
+
+    <div class="info">
+      <span>Net Salary</span>
+      <span>{{netSalary}}</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

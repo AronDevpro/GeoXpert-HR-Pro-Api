@@ -191,3 +191,48 @@ async function generateEmployeeId() {
         throw error;
     }
 }
+
+// for payroll processing get the all employees that branch has and sort them with available contract
+export const searchAllEmployeesWithContract = async (data) => {
+    try {
+        const search = data.search || '';
+        const branchId = data.branchId;
+        const page = parseInt(data.page, 10) || 1;
+        const limit = parseInt(data.limit, 10) || 10;
+        const startIndex = (page - 1) * limit;
+
+        const statusConditions = [
+            { status: { $regex: '^ACTIVE$', $options: 'i' } },
+        ];
+
+        const searchConditions = search
+            ? [
+                { empId: { $regex: search, $options: 'i' } },
+                { firstName: { $regex: search, $options: 'i' } },
+                { lastName: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } },
+                { 'contact.phoneNumberOne': { $regex: search, $options: 'i' } }
+            ]
+            : [];
+
+        const query = {
+            $and: [
+                { branch: branchId },
+                { $or: statusConditions },
+                { currentContract: { $ne: null } },  // Ensure currentContract is not null
+                ...(searchConditions.length > 0 ? [{ $or: searchConditions }] : [])
+            ]
+        };
+
+        const totalSize = await Employee.countDocuments(query);
+
+        const list = await Employee.find(query)
+            .skip(startIndex)
+            .limit(limit)
+            .populate('contact').populate('currentContract');
+        const totalPages = Math.ceil((totalSize || 0) / limit);
+        return { totalPages, content: list };
+    } catch (error) {
+        throw new Error(`Error fetching all records: ${error.message}`);
+    }
+};

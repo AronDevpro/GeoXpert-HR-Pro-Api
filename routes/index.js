@@ -12,6 +12,7 @@ import contractRoute from "../features/employeeContract/contract.route.js";
 import paymentProfileRoute from "../features/paymentProfile/paymentProfile.route.js";
 import attendanceRoute from "../features/attendance/attendance.route.js";
 import locationRoute from "../features/location/location.route.js";
+import payrollRoute from "../features/payroll/payroll.route.js";
 
 export default {
     leaveTypes:leaveTypeRoute,
@@ -28,4 +29,5 @@ export default {
     paymentProfile: paymentProfileRoute,
     attendances:attendanceRoute,
     locations:locationRoute,
+    payroll:payrollRoute,
 }

@@ -23,6 +23,7 @@ app.use('/api/paymentProfiles',passport.authenticate('jwt', {session: false}), r
 app.use('/api/departments',passport.authenticate('jwt', {session: false}), routes.departments);
 app.use('/api/attendances', routes.attendances);
 app.use('/api/locations', routes.locations);
+app.use('/api/payrolls', routes.payroll);
 app.use('/api/auth', routes.auth);
 
 // Start the server
