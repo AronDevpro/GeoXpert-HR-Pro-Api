@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import {format} from "date-fns";
 import {sendPayslipEmail} from "../../util/mailTemplate.js";
 import {sendNotification} from "../../config/oneSignal.js";
+import {Notifications} from "../notification/notification.schema.js";
 
 
 export const createSinglePayroll = async (id, data) => {
@@ -52,7 +53,7 @@ export const createSinglePayroll = async (id, data) => {
     const notification = new Notifications({
         title:`Pay Slip for ${data.period}`,
         message:"test",
-        empId:empData_id
+        empId:empData._id
     })
 
     await notification.save();
