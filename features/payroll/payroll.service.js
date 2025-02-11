@@ -49,7 +49,7 @@ export const createSinglePayroll = async (id, data) => {
             }
         })
     await sendPayslipEmail(getData);
-    const notification = new Notification({
+    const notification = new Notifications({
         title:`Pay Slip for ${data.period}`,
         message:"test",
         empId:empData_id

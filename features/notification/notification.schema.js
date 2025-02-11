@@ -7,4 +7,4 @@ const notificationSchema = new mongoose.Schema({
     empId:{type:mongoose.Schema.Types.ObjectId,ref:"Employee", required: true},
 },{ timestamps: true });
 
-export const Notification = mongoose.model("Notification",notificationSchema);
+export const Notifications = mongoose.model("Notifications",notificationSchema);

@@ -3,7 +3,9 @@ import * as path from "node:path";
 import * as fs from "node:fs";
 
 export const generatePayslipPDF = async (htmlContent, employeeName, period) => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const page = await browser.newPage();
 
     // Set content
