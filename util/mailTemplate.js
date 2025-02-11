@@ -25,7 +25,7 @@ export const sendPayslipEmail = async (user) => {
     try {
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
-        const templatePath = path.join(__dirname, './templates/payslip.html');
+        const templatePath = path.join(__dirname, './templates/paySlip.html');
         let htmlContent = fs.readFileSync(templatePath, 'utf-8');
 
         htmlContent = htmlContent
