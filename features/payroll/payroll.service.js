@@ -41,7 +41,7 @@ export const createSinglePayroll = async (id, data) => {
         period: data.period
     });
     const result = await payrollData.save();
-    const getData = Payroll.findById(result._id)
+    const getData =await Payroll.findById(result._id)
         .populate({
             path: "empId",
             populate: {
