@@ -1,19 +1,27 @@
 import nodemailer from "nodemailer";
 import * as path from "node:path";
+import {Setting} from "../features/setting/setting.schema.js";
 
+const getEmailSettings = async () => {
+    const settings = await Setting.findOne();
+    if (!settings) {
+        throw new Error("No settings found.");
+    }
 
-export const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: "kp0552701@gmail.com",
-        pass: "doeg xwbi meoa qrim",
-    },
-});
+    return nodemailer.createTransport({
+        host: settings?.email.host,
+        port: settings?.email.port,
+        secure: settings?.email.secure,
+        auth: {
+            user: settings?.email.user,
+            pass: settings?.email.pass,
+        },
+    });
+};
 
 export const sendEmail = async (to, subject, htmlContent) => {
     try {
+        const transporter = await getEmailSettings();
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to,
@@ -29,6 +37,7 @@ export const sendEmail = async (to, subject, htmlContent) => {
 
 export const sendEmailWithAttachment = async (to, subject, text, pdfPath) => {
     try {
+        const transporter = await getEmailSettings();
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to,

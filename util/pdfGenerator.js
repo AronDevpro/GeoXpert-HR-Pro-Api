@@ -1,5 +1,6 @@
 import puppeteer from "puppeteer";
 import * as path from "node:path";
+import * as fs from "node:fs";
 
 export const generatePayslipPDF = async (htmlContent, employeeName, period) => {
     const browser = await puppeteer.launch();
@@ -8,8 +9,14 @@ export const generatePayslipPDF = async (htmlContent, employeeName, period) => {
     // Set content
     await page.setContent(htmlContent, { waitUntil: 'load' });
 
+    // Define the PDF directory and ensure it exists
+    const pdfDir = path.join(process.cwd(), 'assets/pdf-generated');
+    if (!fs.existsSync(pdfDir)) {
+        fs.mkdirSync(pdfDir, { recursive: true });
+    }
+
     // Define the PDF path
-    const pdfPath = path.join(process.cwd(), `payslip_${employeeName}_${period}.pdf`);
+    const pdfPath = path.join(pdfDir, `payslip_${employeeName}_${period}.pdf`);
 
     // Generate PDF
     await page.pdf({

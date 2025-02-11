@@ -24,6 +24,10 @@ export const login = async (data) => {
 
     const accessToken = helper.generateAccessToken(user);
     const refreshToken = await helper.generateRefreshToken(user._id);
+    if (data.appToken){
+        user.appToken = data.appToken;
+        await user.save();
+    }
     return {accessToken, refreshToken};
 }
 

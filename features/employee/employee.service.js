@@ -18,7 +18,7 @@ export const createEmployee = async (data) => {
         const savedContact = await contactData.save();
 
         // save Payment profile
-        const paymentProfile = new PaymentProfile(data.bank);
+        const paymentProfile = new PaymentProfile(data.paymentProfile);
         const SavedPaymentProfile =await paymentProfile.save();
 
         const hashPassword = await helper.hashPassword(data.password);
@@ -53,12 +53,11 @@ export const updateEmployee = async (id, data) => {
             const savedContact = await newContact.save();
             employee.contact = savedContact._id;
         }
-
-        if (data.bank) {
-            if (data.bank._id) {
-                await PaymentProfile.findByIdAndUpdate(data.bank._id, data.bank, { new: true });
+        if (data.paymentProfile) {
+            if (data.paymentProfile._id) {
+                await PaymentProfile.findByIdAndUpdate(data.paymentProfile._id, data.paymentProfile, { new: true });
             } else {
-                const newPaymentProfile = new PaymentProfile(data.bank);
+                const newPaymentProfile = new PaymentProfile(data.paymentProfile);
                 const savedPaymentProfile = await newPaymentProfile.save();
                 employee.paymentProfile = savedPaymentProfile._id;
             }
@@ -113,7 +112,7 @@ export const getAllEmployee = async (data) => {
         const list =  await Employee.find(query)
             .skip(startIndex)
             .limit(limit)
-            .populate('contact').populate('branch');
+            .populate('contact').populate('branch').populate('paymentProfile');
         const totalPages = Math.ceil((totalSize || 0) / limit);
         return { totalPages, content: list };
     } catch (error) {
@@ -167,7 +166,7 @@ export const searchAllEmployees = async (data) => {
         const list =  await Employee.find(query)
             .skip(startIndex)
             .limit(limit)
-            .populate('contact');
+            .populate('contact').populate('paymentProfile');
         const totalPages = Math.ceil((totalSize || 0) / limit);
         return { totalPages, content: list };
     } catch (error) {
@@ -219,7 +218,7 @@ export const searchAllEmployeesWithContract = async (data) => {
             $and: [
                 { branch: branchId },
                 { $or: statusConditions },
-                { currentContract: { $ne: null } },  // Ensure currentContract is not null
+                { currentContract: { $ne: null } },
                 ...(searchConditions.length > 0 ? [{ $or: searchConditions }] : [])
             ]
         };
