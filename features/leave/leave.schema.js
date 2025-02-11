@@ -7,7 +7,7 @@ const leaveSchema = new mongoose.Schema({
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
     isHalfDay:{ type: Boolean, required: true ,default:false },
-    status:{type:String,default:"Pending"},
+    status:{type:String,enum:["Pending","Approved","System"],default:"Pending"},
 }, { timestamps: true });
 
 export const Leave = mongoose.model("Leave", leaveSchema);

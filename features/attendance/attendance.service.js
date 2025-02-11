@@ -24,7 +24,6 @@ export const getEmpAttendanceById=async (id) => {
 }
 
 export const createAttendanceRecord = async (id, data)=>{
-    console.log(id)
     if (!id) {
         throw { status: 400, message: 'Employee ID is required' };
     }

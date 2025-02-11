@@ -4,6 +4,7 @@ import config from "./config/config.js";
 import './config/db.js'
 import routes from "./routes/index.js";
 import passport from "./config/passport.js";
+import './jobs/index.js';
 
 const app = express();
 app.use(cors())
@@ -24,6 +25,7 @@ app.use('/api/departments',passport.authenticate('jwt', {session: false}), route
 app.use('/api/attendances', routes.attendances);
 app.use('/api/locations', routes.locations);
 app.use('/api/payrolls', routes.payroll);
+app.use('/api/settings', routes.setting);
 app.use('/api/auth', routes.auth);
 
 // Start the server

@@ -3,7 +3,8 @@ import {Payroll} from "./payroll.schema.js";
 import {BulkPayroll} from "./bulkPayroll.schema.js";
 import mongoose from "mongoose";
 import {format} from "date-fns";
-import {sendPayslipEmail, sendUserRegisterEmail} from "../../util/mailTemplate.js";
+import {sendPayslipEmail} from "../../util/mailTemplate.js";
+import {sendNotification} from "../../config/oneSignal.js";
 
 
 export const createSinglePayroll = async (id, data) => {
@@ -47,7 +48,16 @@ export const createSinglePayroll = async (id, data) => {
                 path: "currentContract",
             }
         })
-    await sendUserRegisterEmail(getData);
+    await sendPayslipEmail(getData);
+    const notification = new Notification({
+        title:`Pay Slip for ${data.period}`,
+        message:"test",
+        empId:empData_id
+    })
+
+    await notification.save();
+
+    await sendNotification(notification);
 
     return result
 }

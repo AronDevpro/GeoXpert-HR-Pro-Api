@@ -36,6 +36,7 @@ export const postPayRun = async (req, res) => {
         res.status(201).json({data: payroll, message: "Payroll generation completed"});
     } catch (error) {
         const status = error.status || 500;
+        console.log(error)
         res.status(status).json({ message: error.message });
     }
 };
