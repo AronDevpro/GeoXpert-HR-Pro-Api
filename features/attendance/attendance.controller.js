@@ -1,13 +1,10 @@
-import {Attendance} from "./attendance.schema.js";
 import {createAttendanceRecord, getEmpAttendanceById, updateAttendanceRecord} from "./attendance.service.js";
-
-const model = Attendance
 
 export const getAllAttendanceByEmpId = async (req, res) => {
     try {
         const id = req.params.id
-        const attendanceRecords = await getEmpAttendanceById(id);
-        res.status(200).json(attendanceRecords);
+        const attendanceRecords = await getEmpAttendanceById(id,req.query);
+        res.status(201).json(attendanceRecords);
     } catch (error) {
         const status = error.status || 500;
         res.status(status).json({ message: error.message });

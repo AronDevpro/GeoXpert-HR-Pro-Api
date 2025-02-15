@@ -30,7 +30,7 @@ export const sendNotification = async (data) => {
             en: data.message
         },
         include_aliases:{
-            external_id:[data.empId],
+            onesignal_id:[data.appToken],
         },
         target_channel:"push"
     };

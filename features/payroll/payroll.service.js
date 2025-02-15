@@ -6,6 +6,7 @@ import {format} from "date-fns";
 import {sendPayslipEmail} from "../../util/mailTemplate.js";
 import {sendNotification} from "../../config/oneSignal.js";
 import {Notifications} from "../notification/notification.schema.js";
+import {Attendance} from "../attendance/attendance.schema.js";
 
 
 export const createSinglePayroll = async (id, data) => {
@@ -53,10 +54,11 @@ export const createSinglePayroll = async (id, data) => {
     const notification = new Notifications({
         title:`Pay Slip for ${data.period}`,
         message:"test",
-        empId:empData._id
+        empId:empData.appToken
     })
-
-    await notification.save();
+    if(empData.appToken){
+        await notification.save();
+    }
 
     await sendNotification(notification);
 
@@ -182,6 +184,31 @@ export const sendReceiptEmail =async (id)=>{
         });
     return await sendPayslipEmail(payroll);
 }
+
+export const getPayrollById = async (id, data) => {
+    if (!id) {
+        throw {status: 400, message: 'Employee ID is required'};
+    }
+    try {
+        const page = parseInt(data.page, 10) || 1;
+        const limit = parseInt(data.limit, 10) || 10;
+        const startIndex = (page - 1) * limit;
+        const totalSize = await Payroll.countDocuments({empId: id});
+        const list = await Payroll.find({empId: id})
+            .skip(startIndex)
+            .limit(limit)
+            .sort({createdAt: -1});
+        if (list.length === 0) {
+            throw {status: 404, message: 'Payroll records not found'};
+        }
+        const totalPages = Math.ceil((totalSize || 0) / limit);
+        return {totalPages, content: list};
+    } catch (error) {
+        if (error.status) throw error;
+        throw {status: 500, message: `Error fetching Payroll: ${error.message}`};
+    }
+}
+
 
 function calculateTotal(data) {
     let total = 0;

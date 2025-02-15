@@ -6,26 +6,33 @@ import {Employee} from "../employee/employee.schema.js";
 import {OfficeShift} from "../officeShift/officeShift.schema.js";
 
 
-export const getEmpAttendanceById=async (id) => {
+export const getEmpAttendanceById = async (id, data) => {
     if (!id) {
-        throw { status: 400, message: 'Employee ID is required' };
+        throw {status: 400, message: 'Employee ID is required'};
     }
-
     try {
-        const attendance = await Attendance.find({ employeeId: id });
-        if (attendance.length === 0) {
-            throw { status: 404, message: 'Attendance records not found' };
+        const page = parseInt(data.page, 10) || 1;
+        const limit = parseInt(data.limit, 10) || 10;
+        const startIndex = (page - 1) * limit;
+        const totalSize = await Attendance.countDocuments({empId: id});
+        const list = await Attendance.find({empId: id})
+            .skip(startIndex)
+            .limit(limit)
+            .sort({createdAt: -1});
+        if (list.length === 0) {
+            throw {status: 404, message: 'Attendance records not found'};
         }
-        return attendance;
+        const totalPages = Math.ceil((totalSize || 0) / limit);
+        return {totalPages, content: list};
     } catch (error) {
         if (error.status) throw error;
-        throw { status: 500, message: `Error fetching attendance: ${error.message}` };
+        throw {status: 500, message: `Error fetching attendance: ${error.message}`};
     }
 }
 
-export const createAttendanceRecord = async (id, data)=>{
+export const createAttendanceRecord = async (id, data) => {
     if (!id) {
-        throw { status: 400, message: 'Employee ID is required' };
+        throw {status: 400, message: 'Employee ID is required'};
     }
     const currentDate = new Date();
     const startOfDay = new Date(currentDate.setHours(0, 0, 0, 0));
@@ -33,7 +40,7 @@ export const createAttendanceRecord = async (id, data)=>{
 
     const attendanceRecord = await Attendance.findOne({
         empId: id,
-        createdAt: { $gte: startOfDay, $lte: endOfDay },
+        createdAt: {$gte: startOfDay, $lte: endOfDay},
     });
 
     // if (attendanceRecord) {
@@ -41,8 +48,8 @@ export const createAttendanceRecord = async (id, data)=>{
     // }
 
     const isHoliday = await Holiday.findOne({
-        startDate: { $lte: endOfDay },
-        endDate: { $gte: startOfDay },
+        startDate: {$lte: endOfDay},
+        endDate: {$gte: startOfDay},
     });
 
     if (isHoliday) {
@@ -52,12 +59,12 @@ export const createAttendanceRecord = async (id, data)=>{
     const emp = await Employee.findById(id)
         .populate({
             path: 'currentContract',
-            populate: { path: 'officeShift', model: 'OfficeShift' },
+            populate: {path: 'officeShift', model: 'OfficeShift'},
         })
         .populate('branch');
 
     if (!emp) {
-        throw { status: 400, message: 'Employee Not Found' };
+        throw {status: 400, message: 'Employee Not Found'};
     }
 
     if (!emp.currentContract || !emp.currentContract.officeShift) {
@@ -77,12 +84,12 @@ export const createAttendanceRecord = async (id, data)=>{
     // }
 
     const finalizeData = new Attendance({
-        empId:id,
-        clockIn:{
+        empId: id,
+        clockIn: {
             time: data.clockInTime,
             isLate,
-            longitude:data.longitude,
-            latitude:data.latitude,
+            longitude: data.longitude,
+            latitude: data.latitude,
         }
     });
 
@@ -91,7 +98,7 @@ export const createAttendanceRecord = async (id, data)=>{
 
 export const updateAttendanceRecord = async (id, data) => {
     if (!id) {
-        throw { status: 400, message: 'Employee ID is required' };
+        throw {status: 400, message: 'Employee ID is required'};
     }
 
     const currentDate = new Date();
@@ -103,21 +110,25 @@ export const updateAttendanceRecord = async (id, data) => {
             $lte: new Date(currentDate.setHours(23, 59, 59, 999)), // End of day
         },
     });
+
     if (!attendanceRecord) {
-        throw { status: 400, message: 'No attendance record found for today.' };
+        throw {status: 400, message: 'No attendance record found for today.'};
     }
+    // if (attendanceRecord?.clockOut?.time) {
+    //     throw { status: 400, message: 'Already Clock-out' };
+    // }
 
     const emp = await Employee.findById(id)
         .populate({
             path: 'currentContract',
-            populate: { path: 'officeShift', model: 'OfficeShift' },
+            populate: {path: 'officeShift', model: 'OfficeShift'},
         })
         .populate('branch');
     if (!emp) {
-        throw { status: 400, message: 'Employee not found' };
+        throw {status: 400, message: 'Employee not found'};
     }
     if (!emp.currentContract || !emp.currentContract.officeShift) {
-        throw { status: 400, message: 'Employee does not have an assigned shift.' };
+        throw {status: 400, message: 'Employee does not have an assigned shift.'};
     }
 
     const clockOutTime = data.clockOutTime;
@@ -131,6 +142,7 @@ export const updateAttendanceRecord = async (id, data) => {
     attendanceRecord.clockOut.isEarlyLeaving = earlyLeave;
     attendanceRecord.clockOut.latitude = data.latitude;
     attendanceRecord.clockOut.longitude = data.latitude;
+    attendanceRecord.clockOut.status = "Normal";
 
     return await attendanceRecord.save();
 };
