@@ -1,12 +1,13 @@
 import {
     createSinglePayroll,
     generateBulkPayroll,
-    generatePayRun,
+    generatePayRun, getPayrollById,
     sendReceiptEmail,
     summeryPayroll
 } from "./payroll.service.js";
 import { search} from "../../service/commonCrud.js";
 import {BulkPayroll} from "./bulkPayroll.schema.js";
+import {getEmpAttendanceById} from "../attendance/attendance.service.js";
 
 export const postSinglePayroll = async (req, res) => {
     try {
@@ -68,3 +69,14 @@ export const getEmailReceipt = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+export const getAllPayrollByEmpId = async (req, res) => {
+    try {
+        const id = req.params.id
+        const payroll = await getPayrollById(id,req.query);
+        res.status(201).json(payroll);
+    } catch (error) {
+        const status = error.status || 500;
+        res.status(status).json({ message: error.message });
+    }
+};

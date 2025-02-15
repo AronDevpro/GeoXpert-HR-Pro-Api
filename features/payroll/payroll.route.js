@@ -1,5 +1,6 @@
 import express from "express";
 import {
+    getAllPayrollByEmpId,
     getBulkPayroll,
     getEmailReceipt,
     getSummery,
@@ -15,6 +16,7 @@ const router = express.Router();
 router.get('/bulkPayroll', getBulkPayroll);
 router.get('/summery', getSummery);
 router.get('/emailReceipt/:id', getEmailReceipt);
+router.get('/:id', getAllPayrollByEmpId);
 
 //api to save
 router.post('/payrun', postPayRun);
