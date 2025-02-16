@@ -7,8 +7,8 @@ import passport from "./config/passport.js";
 import './jobs/index.js';
 
 const app = express();
-app.use(cors())
-
+// app.use(cors())
+app.options('*', cors());
 app.use(express.json());
 
 // route
