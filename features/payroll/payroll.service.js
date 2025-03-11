@@ -195,6 +195,7 @@ export const getPayrollById = async (id, data) => {
         const startIndex = (page - 1) * limit;
         const totalSize = await Payroll.countDocuments({empId: id});
         const list = await Payroll.find({empId: id})
+            .populate('empId')
             .skip(startIndex)
             .limit(limit)
             .sort({createdAt: -1});
