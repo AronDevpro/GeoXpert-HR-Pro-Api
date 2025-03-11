@@ -1,11 +1,23 @@
 import express from "express";
-import {deleteLeave, getAllLeave, postLeave, putLeave} from "./leave.controller.js";
+import {
+    deleteLeave,
+    getAllLeaveByEmpId,
+    getAllPendingLeavesByBranchId,
+    postLeave,
+    putLeave
+} from "./leave.controller.js";
 
 //creating a router
 const router = express.Router();
 
 //api to get all the data
-router.get('/', getAllLeave);
+router.get('/', getAllLeaveByEmpId);
+
+// api to get all leaves by emp id
+router.get('/:id', getAllLeaveByEmpId);
+
+// api to get all pending leaves req by branch id
+router.get('/search/:id', getAllPendingLeavesByBranchId);
 
 //api to save
 router.post('/', postLeave)
