@@ -50,7 +50,6 @@ export const automaticallyAddLeave = async (id, emp) => {
     });
     await finalizeData.save();
     const addLeaveData = new Leave({
-        name: emp.firstName,
         employee: emp._id,
         leaveType: "Unscheduled leave",
         startDate: currentDate,
