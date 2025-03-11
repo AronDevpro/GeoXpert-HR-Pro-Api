@@ -2,7 +2,7 @@ import express from "express";
 import {
     deleteContracts,
     getAllContractsByEmpId,
-    postContracts,
+    postContracts, postPromotionContracts,
     putContracts,
     terminateContact
 } from "./contract.controller.js";
@@ -15,6 +15,9 @@ router.get('/:id', getAllContractsByEmpId);
 
 //api to save
 router.post('/', postContracts);
+
+// api for promotion
+router.post('/promotion', postPromotionContracts);
 
 //api to update
 router.put('/:id', putContracts);

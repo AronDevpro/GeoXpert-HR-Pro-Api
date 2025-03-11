@@ -1,7 +1,14 @@
 import express from 'express';
-import {getAllAttendanceByEmpId, postAttendance, putAttendance} from "./attendance.controller.js";
+import {
+    getAllAttendanceByBranchId,
+    getAllAttendanceByEmpId,
+    postAttendance,
+    putAttendance
+} from "./attendance.controller.js";
 
 const router = express.Router();
+
+router.get('/branch/:id', getAllAttendanceByBranchId);
 
 router.get('/:id', getAllAttendanceByEmpId);
 

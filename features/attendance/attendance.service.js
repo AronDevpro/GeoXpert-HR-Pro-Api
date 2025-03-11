@@ -4,8 +4,9 @@ import {Holiday} from "../holiday/holiday.schema.js";
 import {isPointWithinRadius} from "geolib";
 import {Employee} from "../employee/employee.schema.js";
 import {OfficeShift} from "../officeShift/officeShift.schema.js";
+import mongoose from "mongoose";
 
-
+// get attendance by id
 export const getEmpAttendanceById = async (id, data) => {
     if (!id) {
         throw {status: 400, message: 'Employee ID is required'};
@@ -16,6 +17,7 @@ export const getEmpAttendanceById = async (id, data) => {
         const startIndex = (page - 1) * limit;
         const totalSize = await Attendance.countDocuments({empId: id});
         const list = await Attendance.find({empId: id})
+            .populate('empId')
             .skip(startIndex)
             .limit(limit)
             .sort({createdAt: -1});
@@ -30,6 +32,50 @@ export const getEmpAttendanceById = async (id, data) => {
     }
 }
 
+// get attendance by branch id
+export const getEmpAttendanceByBranchId = async (id, data) => {
+    if (!id) {
+        throw {status: 400, message: 'Branch ID is required'};
+    }
+    try {
+        const search = data.search || '';
+        const branchId = new mongoose.Types.ObjectId(id);
+        const page = parseInt(data.page, 10) || 1;
+        const limit = parseInt(data.limit, 10) || 10;
+        const startIndex = (page - 1) * limit;
+
+        const list = await Attendance.find()
+            .populate('empId')
+            .sort({createdAt: -1})
+            .lean();
+
+        if (list.length === 0) {
+            throw {status: 404, message: 'Attendance records not found'};
+        }
+        let filteredBranch = list.filter(emp => emp?.empId?.branch?.equals(branchId));
+
+        // Filter by search (firstName or lastName)
+        if (search) {
+            filteredBranch = filteredBranch.filter(emp => {
+                const firstName = emp?.empId?.firstName?.toLowerCase() || '';
+                const lastName = emp?.empId?.lastName?.toLowerCase() || '';
+                return firstName.includes(search) || lastName.includes(search);
+            });
+        }
+
+        if (filteredBranch.length === 0) {
+            throw {status: 400, message: "Couldn't find any employees with the specified branch"};
+        }
+        const paginatedResults = filteredBranch.slice(startIndex, startIndex + limit);
+        const totalPages = Math.ceil((filteredBranch.length || 0) / limit);
+        return {totalPages, content: paginatedResults};
+    } catch (error) {
+        if (error.status) throw error;
+        throw {status: 500, message: `Error fetching attendance: ${error.message}`};
+    }
+}
+
+// create attendance record
 export const createAttendanceRecord = async (id, data) => {
     if (!id) {
         throw {status: 400, message: 'Employee ID is required'};
@@ -96,6 +142,7 @@ export const createAttendanceRecord = async (id, data) => {
     return await finalizeData.save();
 }
 
+// update attendance record
 export const updateAttendanceRecord = async (id, data) => {
     if (!id) {
         throw {status: 400, message: 'Employee ID is required'};
