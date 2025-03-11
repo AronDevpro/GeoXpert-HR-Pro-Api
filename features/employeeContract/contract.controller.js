@@ -1,6 +1,6 @@
 import {remove, update} from "../../service/commonCrud.js";
 import {Contracts} from "./contract.schema.js";
-import {createContract, getContractsById, terminateContract} from "./contract.service.js";
+import {createContract, createPromotionContract, getContractsById, terminateContract} from "./contract.service.js";
 
 const model = Contracts
 
@@ -22,6 +22,16 @@ export const postContracts = async (req, res) => {
         res.status(500).json({message: error.message});
     }
 };
+
+export const postPromotionContracts = async (req, res) => {
+    try {
+        const Contracts = await createPromotionContract(req.body);
+        res.status(201).json({data: Contracts, message: "Data Updated."});
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+};
+
 
 export const putContracts = async (req, res) => {
     try {

@@ -3,13 +3,13 @@ import {Employee} from "../employee/employee.schema.js";
 
 export const terminateContract = async (id) => {
     try {
-        const item = await Contracts.findByIdAndUpdate(id, { status: 'Terminated', endDate: new Date()}, { new: true });
+        const item = await Contracts.findByIdAndUpdate(id, {status: 'Terminated', endDate: new Date()}, {new: true});
         if (!item) throw new Error('Contract not found');
 
         const employeeUpdate = await Employee.findByIdAndUpdate(
             item.employeeId,
-            { currentContract: null },
-            { new: true }
+            {currentContract: null},
+            {new: true}
         );
 
         if (!employeeUpdate) {
@@ -24,7 +24,7 @@ export const terminateContract = async (id) => {
 //get contracts by employee id
 export const getContractsById = async (id) => {
     try {
-        return await Contracts.find({employeeId: id}).populate('officeShift');
+        return await Contracts.find({employeeId: id}).populate('officeShift').sort({createdAt: -1});
     } catch (error) {
         throw new Error(`Error fetching contracts: ${error.message}`);
     }
@@ -36,7 +36,28 @@ export const createContract = async (data) => {
         const contractData = new Contracts(data);
         const savedContract = await contractData.save();
 
-        await Employee.findByIdAndUpdate(data.employeeId,{currentContract:savedContract._id},{new: true});
+        await Employee.findByIdAndUpdate(data.employeeId, {currentContract: savedContract._id}, {new: true});
+        return contractData;
+    } catch (error) {
+        throw new Error(`Error Creating Employee: ${error.message}`);
+    }
+};
+
+// promotion
+export const createPromotionContract = async (data) => {
+    try {
+        const empContacts = await Contracts.find({employeeId: data.employeeId, status: "Active"});
+
+        if (empContacts) {
+            empContacts.map(async item => {
+                await Contracts.findByIdAndUpdate(item._id, {status: 'Terminated', endDate: new Date()}, {new: true});
+            })
+        }
+
+        const contractData = new Contracts(data);
+        const savedContract = await contractData.save();
+
+        await Employee.findByIdAndUpdate(data.employeeId, {currentContract: savedContract._id}, {new: true});
         return contractData;
     } catch (error) {
         throw new Error(`Error Creating Employee: ${error.message}`);
