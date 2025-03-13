@@ -3,7 +3,7 @@ import {
     getAllPayrollByEmpId,
     getBulkPayroll,
     getEmailReceipt,
-    getSummery,
+    getSummery, getTotalPaidByBranchId,
     postBulkPayroll,
     postPayRun,
     postSinglePayroll
@@ -16,6 +16,7 @@ const router = express.Router();
 router.get('/bulkPayroll', getBulkPayroll);
 router.get('/summery', getSummery);
 router.get('/emailReceipt/:id', getEmailReceipt);
+router.get('/BranchRate/:id', getTotalPaidByBranchId);
 router.get('/:id', getAllPayrollByEmpId);
 
 //api to save

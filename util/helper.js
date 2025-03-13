@@ -18,7 +18,7 @@ async function comparePassword(password, hashPassword) {
 export function generateAccessToken(user){
     const payload = {
         id: user._id,
-        name: user.firstName,
+        name: user.firstName + " " + user.lastName,
         email: user.email,
         branch:user.branch,
         status: user.status,

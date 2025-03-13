@@ -2,11 +2,17 @@ import express from "express";
 import {
     changeEmployeeStatus,
     deleteEmployee,
-    getAllEmployees, getEmployeeByEmpNo,
+    getAllEmployees,
+    getEmployeeByEmpNo,
     getEmployeeById,
+    getEmployeesCount,
+    getEmployeeTotalRateByBranch,
+    getRecentAllEmployees,
+    getRecentEmployeesByBranch,
     postEmployee,
     putEmployee,
-    searchAllEmployeesBasedOnBranch, searchAllEmployeesBasedOnBranchWithContract
+    searchAllEmployeesBasedOnBranch,
+    searchAllEmployeesBasedOnBranchWithContract
 } from "./employee.controller.js";
 
 //creating a router
@@ -17,6 +23,18 @@ router.get('/', getAllEmployees);
 
 //api to get all the data
 router.get('/search', searchAllEmployeesBasedOnBranch);
+
+// employees count
+router.get('/count', getEmployeesCount);
+
+// api to get total rate by branch id
+router.get('/rate/:id', getEmployeeTotalRateByBranch);
+
+// get recent employees
+router.get('/recent/:id', getRecentEmployeesByBranch);
+router.get('/recent', getRecentAllEmployees);
+
+// api to search on payroll
 router.get('/payroll/search', searchAllEmployeesBasedOnBranchWithContract);
 
 // gte by id

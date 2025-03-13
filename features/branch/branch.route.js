@@ -2,7 +2,7 @@ import express from "express";
 import {
     changeBranchStatus,
     deleteBranch, getAllActiveBranch,
-    getAllBranch,
+    getAllBranch, getBranchCount,
     postBranch,
     putBranch,
 } from "./branch.controller.js";
@@ -15,6 +15,9 @@ router.get('/', getAllBranch);
 
 //api to get all the data
 router.get('/active', getAllActiveBranch);
+
+// api to get branch count
+router.get('/count', getBranchCount);
 
 //api to save
 router.post('/', postBranch);

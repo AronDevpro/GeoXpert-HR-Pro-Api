@@ -1,13 +1,17 @@
 import express from "express";
-import {getSetting, putSetting} from "./setting.controller.js";
+import {getPublicSetting, getSetting, putSetting} from "./setting.controller.js";
+import passport from "../../config/passport.js";
 
 //creating a router
 const router = express.Router();
 
 //api to get all the data
-router.get('/', getSetting);
+router.get('/',passport.authenticate('jwt', {session: false}), getSetting);
+
+// public access
+router.get('/public', getPublicSetting);
 
 //api to update
-router.put('/', putSetting)
+router.put('/',passport.authenticate('jwt', {session: false}), putSetting)
 
 export default router;
