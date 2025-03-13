@@ -1,8 +1,17 @@
 import express from "express";
-import {deleteDepartment, getAllDepartment, postDepartment, putDepartment} from "./department.controller.js";
+import {
+    deleteDepartment,
+    getAllDepartment,
+    getAllDepartmentCount,
+    postDepartment,
+    putDepartment
+} from "./department.controller.js";
 
 //creating a router
 const router = express.Router();
+
+// api to get the count
+router.get('/count', getAllDepartmentCount);
 
 //api to get all the data
 router.get('/', getAllDepartment);

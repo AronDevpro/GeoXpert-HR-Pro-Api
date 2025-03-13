@@ -1,5 +1,6 @@
 import {
-    createAttendanceRecord,
+    AttendanceRate,
+    createAttendanceRecord, getBranchAttendanceRate,
     getEmpAttendanceByBranchId,
     getEmpAttendanceById,
     updateAttendanceRecord
@@ -20,6 +21,28 @@ export const getAllAttendanceByBranchId = async (req, res) => {
     try {
         const id = req.params.id;
         const attendanceRecords = await getEmpAttendanceByBranchId(id,req.query);
+        res.status(201).json(attendanceRecords);
+    } catch (error) {
+        const status = error.status || 500;
+        res.status(status).json({ message: error.message });
+    }
+};
+
+export const getAttendanceRate = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const attendanceRecords = await AttendanceRate(id);
+        res.status(201).json(attendanceRecords);
+    } catch (error) {
+        const status = error.status || 500;
+        res.status(status).json({ message: error.message });
+    }
+};
+
+export const getAttendanceRateByBranch = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const attendanceRecords = await getBranchAttendanceRate(id);
         res.status(201).json(attendanceRecords);
     } catch (error) {
         const status = error.status || 500;

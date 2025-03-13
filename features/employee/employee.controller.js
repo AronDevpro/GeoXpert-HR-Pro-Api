@@ -2,8 +2,8 @@ import {getById, softDelete, statusChange} from "../../service/commonCrud.js";
 import {Employee} from "./employee.schema.js";
 import {
     createEmployee,
-    getAllEmployee,
-    getEmployeesById,
+    getAllEmployee, getAllRecentEmployees, getBranchEmployeeRate,
+    getEmployeesById, getRecentEmployees, getTotalEmployeesCount,
     searchAllEmployees, searchAllEmployeesWithContract,
     updateEmployee
 } from "./employee.service.js";
@@ -52,6 +52,44 @@ export const getEmployeeById = async (req, res) => {
         const id = req.params.id
         const Employee = await getById(model,id);
         res.status(200).json(Employee);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const getEmployeeTotalRateByBranch = async (req, res) => {
+    try {
+        const id = req.params.id
+        const data = await getBranchEmployeeRate(id);
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const getRecentEmployeesByBranch = async (req, res) => {
+    try {
+        const id = req.params.id
+        const data = await getRecentEmployees(id);
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const getRecentAllEmployees = async (req, res) => {
+    try {
+        const data = await getAllRecentEmployees();
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const getEmployeesCount = async (req, res) => {
+    try {
+        const data = await getTotalEmployeesCount();
+        res.status(200).json(data);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -210,6 +210,46 @@ export const getPayrollById = async (id, data) => {
     }
 }
 
+export const getTotalPaidSalaryByBranch = async (branchId) => {
+    try {
+        // Fetch all active employees in the branch
+        const employees = await Employee.find({
+            branch: new mongoose.Types.ObjectId(branchId),
+            status: "Active"
+        }).select("_id");
+
+        const employeeIds = employees.map(emp => emp._id);
+
+        // Fetch payroll records for the employees in the branch, filtering by "Paid" status
+        const totalPaidSalary = await Payroll.aggregate([
+            {
+                $match: {
+                    empId: { $in: employeeIds },
+                    status: "Paid"
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalPaid: {
+                        $sum: "$netSalary"
+                    }
+                }
+            }
+        ]);
+
+        // Return the total paid salary for the branch
+        const totalPaid = totalPaidSalary[0] ? totalPaidSalary[0].totalPaid : 0;
+
+        return {
+            branchId,
+            totalPaidSalary: totalPaid.toFixed(2)
+        };
+
+    } catch (error) {
+        throw new Error("Unable to fetch total paid salary");
+    }
+};
 
 function calculateTotal(data) {
     let total = 0;

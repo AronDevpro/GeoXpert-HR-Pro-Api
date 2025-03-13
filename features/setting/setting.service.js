@@ -25,3 +25,12 @@ export const getSettings = async () => {
         throw new Error("No settings Found.");
     }
 }
+
+export const publicSettings = async () => {
+    try {
+        const settings = await Setting.findOne();
+        return {sitename:settings.siteName, logo:settings.logo}
+    } catch (error) {
+        throw new Error("No settings Found.");
+    }
+}

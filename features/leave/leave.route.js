@@ -2,7 +2,7 @@ import express from "express";
 import {
     deleteLeave,
     getAllLeaveByEmpId,
-    getAllPendingLeavesByBranchId,
+    getAllPendingLeavesByBranchId, getLeaveRateByBranchId, getLeaveRateByEmpId,
     postLeave,
     putLeave
 } from "./leave.controller.js";
@@ -12,6 +12,12 @@ const router = express.Router();
 
 //api to get all the data
 router.get('/', getAllLeaveByEmpId);
+
+// api to leave rate
+router.get('/rate/:id', getLeaveRateByEmpId);
+
+// api to leave rate by branch
+router.get('/branchRate/:id', getLeaveRateByBranchId);
 
 // api to get all leaves by emp id
 router.get('/:id', getAllLeaveByEmpId);

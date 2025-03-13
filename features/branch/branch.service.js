@@ -121,3 +121,7 @@ export const activeBranches = async (data) => {
     }
 };
 
+export const getTotalBranchCount = async ()=>{
+    return await Branch.countDocuments();
+}
+

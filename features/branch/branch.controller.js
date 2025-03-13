@@ -1,6 +1,6 @@
 import {remove, statusChange} from "../../service/commonCrud.js";
 import {Branch} from "./branch.schema.js";
-import {activeBranches, createBranch, searchAllBranches, updateBranch} from "./branch.service.js";
+import {activeBranches, createBranch, getTotalBranchCount, searchAllBranches, updateBranch} from "./branch.service.js";
 
 const model = Branch
 
@@ -16,6 +16,15 @@ export const getAllBranch = async (req, res) => {
 export const getAllActiveBranch = async (req, res) => {
     try {
         const Branch = await activeBranches(req.query)
+        res.status(200).json(Branch);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export const getBranchCount = async (req, res) => {
+    try {
+        const Branch = await getTotalBranchCount(req.query)
         res.status(200).json(Branch);
     } catch (error) {
         res.status(500).json({ message: error.message });
