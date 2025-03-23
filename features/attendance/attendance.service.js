@@ -99,9 +99,9 @@ export const createAttendanceRecord = async (id, data) => {
         createdAt: {$gte: startOfDay, $lte: endOfDay},
     });
 
-    // if (attendanceRecord) {
-    //     throw { status: 400, message: "You're already Attended Today" };
-    // }
+    if (attendanceRecord) {
+        throw {status: 400, message: "You're already Attended Today"};
+    }
 
     const isHoliday = await Holiday.findOne({
         startDate: {$lte: endOfDay},
@@ -131,8 +131,8 @@ export const createAttendanceRecord = async (id, data) => {
 
     // Validate geolocation
     const isWithinRadius = isPointWithinRadius(
-        { latitude: data.latitude, longitude: data.longitude }, // User's location
-        { latitude: emp.branch.latitude, longitude: emp.branch.longitude }, // Office location
+        {latitude: data.latitude, longitude: data.longitude}, // User's location
+        {latitude: emp.branch.latitude, longitude: emp.branch.longitude}, // Office location
         emp.branch.radius // Radius in meters
     );
     if (!isWithinRadius) {
@@ -171,9 +171,9 @@ export const updateAttendanceRecord = async (id, data) => {
     if (!attendanceRecord) {
         throw {status: 400, message: 'No attendance record found for today.'};
     }
-    // if (attendanceRecord?.clockOut?.time) {
-    //     throw { status: 400, message: 'Already Clock-out' };
-    // }
+    if (attendanceRecord?.clockOut?.time) {
+        throw {status: 400, message: 'Already Clock-out'};
+    }
 
     const emp = await Employee.findById(id)
         .populate({
@@ -271,20 +271,20 @@ export const AttendanceRate = async (empId) => {
             {
                 $match: {
                     empId: new mongoose.Types.ObjectId(empId),
-                    createdAt: { $gte: startOfCurrentMonth, $lte: endOfCurrentMonth }
+                    createdAt: {$gte: startOfCurrentMonth, $lte: endOfCurrentMonth}
                 }
             },
-            { $group: { _id: null, totalHours: { $sum: "$totalHours" } } }
+            {$group: {_id: null, totalHours: {$sum: "$totalHours"}}}
         ]);
 
         const lastMonthAttendance = await Attendance.aggregate([
             {
                 $match: {
                     empId: new mongoose.Types.ObjectId(empId),
-                    createdAt: { $gte: startOfLastMonth, $lte: endOfLastMonth }
+                    createdAt: {$gte: startOfLastMonth, $lte: endOfLastMonth}
                 }
             },
-            { $group: { _id: null, totalHours: { $sum: "$totalHours" } } }
+            {$group: {_id: null, totalHours: {$sum: "$totalHours"}}}
         ]);
 
         // Extract total hours worked
@@ -331,14 +331,14 @@ export const getBranchAttendanceRate = async (branchId) => {
         const currentMonthAttendance = await Attendance.aggregate([
             {
                 $match: {
-                    empId: { $in: employeeIds },
-                    createdAt: { $gte: startOfCurrentMonth, $lt: startOfNextMonth }
+                    empId: {$in: employeeIds},
+                    createdAt: {$gte: startOfCurrentMonth, $lt: startOfNextMonth}
                 }
             },
             {
                 $group: {
                     _id: null,
-                    totalHours: { $sum: "$totalHours" }
+                    totalHours: {$sum: "$totalHours"}
                 }
             }
         ]);
@@ -347,14 +347,14 @@ export const getBranchAttendanceRate = async (branchId) => {
         const lastMonthAttendance = await Attendance.aggregate([
             {
                 $match: {
-                    empId: { $in: employeeIds },
-                    createdAt: { $gte: startOfLastMonth, $lt: startOfCurrentMonth }
+                    empId: {$in: employeeIds},
+                    createdAt: {$gte: startOfLastMonth, $lt: startOfCurrentMonth}
                 }
             },
             {
                 $group: {
                     _id: null,
-                    totalHours: { $sum: "$totalHours" }
+                    totalHours: {$sum: "$totalHours"}
                 }
             }
         ]);
