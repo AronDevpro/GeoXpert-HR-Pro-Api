@@ -130,14 +130,14 @@ export const createAttendanceRecord = async (id, data) => {
     const isLate = isTimeLate(data.clockInTime, emp.currentContract.officeShift.startTime);
 
     // Validate geolocation
-    // const isWithinRadius = isPointWithinRadius(
-    //     { latitude: data.latitude, longitude: data.longitude }, // User's location
-    //     { latitude: emp.branch.latitude, longitude: emp.branch.longitude }, // Office location
-    //     emp.branch.radius // Radius in meters
-    // );
-    // if (!isWithinRadius) {
-    //     throw new Error("You're out of the office location range.");
-    // }
+    const isWithinRadius = isPointWithinRadius(
+        { latitude: data.latitude, longitude: data.longitude }, // User's location
+        { latitude: emp.branch.latitude, longitude: emp.branch.longitude }, // Office location
+        emp.branch.radius // Radius in meters
+    );
+    if (!isWithinRadius) {
+        throw new Error("You're out of the office location range.");
+    }
 
     const finalizeData = new Attendance({
         empId: id,

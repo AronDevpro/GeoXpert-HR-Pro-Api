@@ -75,7 +75,6 @@ export const updateEmployee = async (id, data) => {
     }
 };
 
-
 //get all Employee along with reference
 export const getAllEmployee = async (data) => {
     try {
@@ -181,7 +180,6 @@ export const searchAllEmployees = async (data) => {
     }
 };
 
-
 //generate unique employee id
 async function generateEmployeeId() {
     try {
@@ -259,6 +257,7 @@ export const getBranchEmployeeRate = async (branchId) => {
         const currentMonthEmployees = await Employee.countDocuments({
             branch: new mongoose.Types.ObjectId(branchId),
             status: "Active",
+            role: "Employee",
             createdAt: {
                 $gte: startOfCurrentMonth,
                 $lt: startOfNextMonth
@@ -268,6 +267,7 @@ export const getBranchEmployeeRate = async (branchId) => {
         const lastMonthEmployees = await Employee.countDocuments({
             branch: new mongoose.Types.ObjectId(branchId),
             status: "Active",
+            role: "Employee",
             createdAt: {
                 $gte: startOfLastMonth,
                 $lt: startOfCurrentMonth
@@ -282,6 +282,7 @@ export const getBranchEmployeeRate = async (branchId) => {
         const totalEmployees = await Employee.countDocuments({
             branch: new mongoose.Types.ObjectId(branchId),
             status: "Active",
+            role: "Employee",
         });
 
         return {
@@ -303,6 +304,7 @@ export const getRecentEmployees = async (branchId) => {
         const currentMonthEmployees = await Employee.find({
             branch: new mongoose.Types.ObjectId(branchId),
             status: "Active",
+            role: "Employee",
             createdAt: {
                 $gte: startOfCurrentMonth,
                 $lt: startOfNextMonth
@@ -310,13 +312,13 @@ export const getRecentEmployees = async (branchId) => {
         }).populate('currentContract')
             .sort({createdAt: -1});
 
-        return currentMonthEmployees.slice(0,10);
+        return currentMonthEmployees.slice(0, 10);
     } catch (error) {
         throw new Error("Unable to fetch employee rate");
     }
 }
 
-export const getTotalEmployeesCount = async ()=>{
+export const getTotalEmployeesCount = async () => {
     return await Employee.countDocuments();
 }
 
@@ -335,7 +337,7 @@ export const getAllRecentEmployees = async () => {
         }).populate('currentContract')
             .sort({createdAt: -1});
 
-        return currentMonthEmployees.slice(0,10);
+        return currentMonthEmployees.slice(0, 10);
     } catch (error) {
         throw new Error("Unable to fetch employee rate");
     }

@@ -14,7 +14,7 @@ export const sendUserRegisterEmail = async (user) => {
         htmlContent = htmlContent
             .replace('{{name}}',user.firstName)
 
-        await sendEmail(user.email, 'Welcome to SHRMS!', htmlContent);
+        await sendEmail(user.email, 'Welcome to GeoXpert HR Pro!', htmlContent);
     } catch (error) {
         console.error('Error sending registration email:', error);
         throw error;

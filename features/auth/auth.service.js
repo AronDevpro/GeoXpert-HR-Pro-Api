@@ -3,10 +3,10 @@ import helper from "../../util/helper.js";
 import {RefreshToken} from "./refreshToken.schema.js";
 
 export const login = async (data) => {
-    const { email, password } = data;
-    const user = await Employee.findOne({ email }).populate('branch').populate({
+    const {email, password} = data;
+    const user = await Employee.findOne({email}).populate('branch').populate({
         path: 'currentContract',
-        populate: { path: 'officeShift', model: 'OfficeShift' },
+        populate: {path: 'officeShift', model: 'OfficeShift'},
     });
 
     if (!user) {
@@ -24,27 +24,26 @@ export const login = async (data) => {
 
     const accessToken = helper.generateAccessToken(user);
     const refreshToken = await helper.generateRefreshToken(user._id);
-    if (data.appToken){
+    if (data.appToken) {
         user.appToken = data.appToken;
         await user.save();
     }
     return {accessToken, refreshToken};
 }
 
-
 export const newRefreshToken = async (data) => {
-    const { refreshToken: refreshTokenUUID } = data;
-    const refreshToken = await RefreshToken.findOne({ token: refreshTokenUUID })
+    const {refreshToken: refreshTokenUUID} = data;
+    const refreshToken = await RefreshToken.findOne({token: refreshTokenUUID})
         .populate('user')
         .populate({
             path: 'user',
-            populate: { path: 'branch', model: 'Branch' },
+            populate: {path: 'branch', model: 'Branch'},
         })
         .populate({
             path: 'user',
             populate: {
                 path: 'currentContract',
-                populate: { path: 'officeShift', model: 'OfficeShift' },
+                populate: {path: 'officeShift', model: 'OfficeShift'},
             },
         });
 
@@ -63,5 +62,5 @@ export const newRefreshToken = async (data) => {
     const newAccessToken = helper.generateAccessToken(refreshToken.user);
     const newRefreshToken = await helper.generateRefreshToken(refreshToken.user._id);
 
-    return {accessToken:newAccessToken, refreshToken:newRefreshToken};
+    return {accessToken: newAccessToken, refreshToken: newRefreshToken};
 }

@@ -20,19 +20,21 @@ export const sendNotification = async (data) => {
     const configuration = await getConfigurationSettings();
 
     const client = new OneSignal.DefaultApi(configuration);
-    const notification ={
-        name:data.title,
-        app_id:settings.oneSignal.appId,
-        headings:{
-            en:data.title
+    const notification = {
+        name: data.title,
+        app_id: settings.oneSignal.appId,
+        headings: {
+            en: data.title
         },
         contents: {
             en: data.message
         },
-        include_aliases:{
-            onesignal_id:[data.appToken],
+        include_aliases: {
+            onesignal_id: [data.appToken],
         },
-        target_channel:"push"
+        target_channel: "push",
+        android_accent_color: "4177FF",
+        small_icon: "ic_notification",
     };
     try {
         const response = await client.createNotification(notification);

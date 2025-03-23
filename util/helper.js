@@ -15,17 +15,18 @@ async function comparePassword(password, hashPassword) {
     return await bcrypt.compare(password, hashPassword);
 }
 
-export function generateAccessToken(user){
+export function generateAccessToken(user) {
     const payload = {
         id: user._id,
         name: user.firstName + " " + user.lastName,
         email: user.email,
-        branch:user.branch,
+        branch: user.branch,
         status: user.status,
         role: user.role,
-        contract:user.currentContract
+        contract: user.currentContract,
+        photo: user.photo,
     }
-    return jwt.sign(payload,config.secretKey,{ expiresIn: '24H'})
+    return jwt.sign(payload, config.secretKey, {expiresIn: '24H'})
 }
 
 export async function generateRefreshToken(userId) {
@@ -44,4 +45,4 @@ export function verifyRefreshTokenExpiration(token) {
     return token.expiryDate.getTime() < new Date().getTime();
 }
 
-export default { hashPassword, comparePassword, generateAccessToken,generateRefreshToken,verifyRefreshTokenExpiration };
+export default {hashPassword, comparePassword, generateAccessToken, generateRefreshToken, verifyRefreshTokenExpiration};

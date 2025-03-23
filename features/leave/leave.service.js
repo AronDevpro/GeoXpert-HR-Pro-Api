@@ -2,6 +2,7 @@ import {Leave} from "./leave.schema.js";
 import mongoose from "mongoose";
 import {addMonths, differenceInBusinessDays, endOfMonth, startOfMonth, subMonths} from "date-fns";
 import {Employee} from "../employee/employee.schema.js";
+import {sendNotification} from "../../config/oneSignal.js";
 
 export const GetAllLeavesById = async (id, data) => {
     try {
@@ -96,15 +97,15 @@ export const getMonthlyLeaveRate = async (empId) => {
         const currentMonthLeaves = await Leave.find({
             employee: new mongoose.Types.ObjectId(empId),
             status: "Approved",
-            startDate: { $lte: endOfCurrentMonth },
-            endDate: { $gte: startOfCurrentMonth }
+            startDate: {$lte: endOfCurrentMonth},
+            endDate: {$gte: startOfCurrentMonth}
         });
 
         const lastMonthLeaves = await Leave.find({
             employee: new mongoose.Types.ObjectId(empId),
             status: "Approved",
-            startDate: { $lte: endOfLastMonth },
-            endDate: { $gte: startOfLastMonth }
+            startDate: {$lte: endOfLastMonth},
+            endDate: {$gte: startOfLastMonth}
         });
 
         // Function to calculate total leave days (including half-days)
@@ -161,9 +162,9 @@ export const getBranchLeaveRate = async (branchId) => {
         const currentMonthLeaves = await Leave.aggregate([
             {
                 $match: {
-                    employee: { $in: employeeIds },
-                    status: { $in: ["Active", "System"] },
-                    startDate: { $gte: startOfCurrentMonth, $lt: startOfNextMonth }
+                    employee: {$in: employeeIds},
+                    status: {$in: ["Active", "System"]},
+                    startDate: {$gte: startOfCurrentMonth, $lt: startOfNextMonth}
                 }
             },
             {
@@ -172,7 +173,7 @@ export const getBranchLeaveRate = async (branchId) => {
                     totalLeaveDays: {
                         $sum: {
                             $cond: {
-                                if: { $eq: ["$isHalfDay", true] },
+                                if: {$eq: ["$isHalfDay", true]},
                                 then: 0.5,
                                 else: 1
                             }
@@ -186,9 +187,9 @@ export const getBranchLeaveRate = async (branchId) => {
         const lastMonthLeaves = await Leave.aggregate([
             {
                 $match: {
-                    employee: { $in: employeeIds },
-                    status: { $in: ["Active", "System"] },
-                    startDate: { $gte: startOfLastMonth, $lt: startOfCurrentMonth }
+                    employee: {$in: employeeIds},
+                    status: {$in: ["Active", "System"]},
+                    startDate: {$gte: startOfLastMonth, $lt: startOfCurrentMonth}
                 }
             },
             {
@@ -197,7 +198,7 @@ export const getBranchLeaveRate = async (branchId) => {
                     totalLeaveDays: {
                         $sum: {
                             $cond: {
-                                if: { $eq: ["$isHalfDay", true] },
+                                if: {$eq: ["$isHalfDay", true]},
                                 then: 0.5,
                                 else: 1
                             }
@@ -232,5 +233,23 @@ export const getBranchLeaveRate = async (branchId) => {
 
     } catch (error) {
         throw new Error("Unable to fetch leave rate");
+    }
+};
+
+export const updateLeave = async (id, data) => {
+    try {
+        const item = await Leave.findByIdAndUpdate(id, data, {new: true}).populate("employee");
+        if (!item) throw new Error('Item not found');
+
+        const notification = {
+            title: `Your Leave Request has been ${data.status}`,
+            message: data.status === "Approved" ? "Enjoy your time off! If you have any" +
+                " questions, feel free to reach out to HR." : "Please check your leave details or contact your manager for more information.",
+            appToken: item?.employee?.appToken,
+        }
+        await sendNotification(notification);
+        return item;
+    } catch (error) {
+        throw new Error(`Error updating record: ${error.message}`);
     }
 };

@@ -5,8 +5,6 @@ import mongoose from "mongoose";
 import {format} from "date-fns";
 import {sendPayslipEmail} from "../../util/mailTemplate.js";
 import {sendNotification} from "../../config/oneSignal.js";
-import {Notifications} from "../notification/notification.schema.js";
-import {Attendance} from "../attendance/attendance.schema.js";
 
 
 export const createSinglePayroll = async (id, data) => {
@@ -43,7 +41,7 @@ export const createSinglePayroll = async (id, data) => {
         period: data.period
     });
     const result = await payrollData.save();
-    const getData =await Payroll.findById(result._id)
+    const getData = await Payroll.findById(result._id)
         .populate({
             path: "empId",
             populate: {
@@ -51,13 +49,10 @@ export const createSinglePayroll = async (id, data) => {
             }
         })
     await sendPayslipEmail(getData);
-    const notification = new Notifications({
-        title:`Pay Slip for ${data.period}`,
-        message:"test",
-        empId:empData.appToken
-    })
-    if(empData.appToken){
-        await notification.save();
+    const notification = {
+        title: `Salary Slip – ${data.period}`,
+        message: `Your pay slip for ${data.period} is ready.`,
+        appToken: empData.appToken
     }
 
     await sendNotification(notification);
@@ -141,18 +136,18 @@ export const summeryPayroll = async (data) => {
                 path: "currentContract",
             }
         })
-        .sort({ createAt: -1 });
+        .sort({createAt: -1});
 
     let periods = [...new Set(payroll.map(record => record.period))];
 
     if (requestedPeriod && !periods.includes(requestedPeriod)) {
-        return { message: `Requested period '${requestedPeriod}' is not available` };
+        return {message: `Requested period '${requestedPeriod}' is not available`};
     }
 
     let selectedPeriod = requestedPeriod || (periods.includes(currentPeriod) ? currentPeriod : periods[0]) || null;
 
     if (!selectedPeriod) {
-        return { message: "No payroll data available" };
+        return {message: "No payroll data available"};
     }
     let filteredPayroll = payroll.filter(record => record.period === selectedPeriod);
 
@@ -174,8 +169,8 @@ export const summeryPayroll = async (data) => {
     };
 };
 
-export const sendReceiptEmail =async (id)=>{
-    const payroll =await Payroll.findById(id)
+export const sendReceiptEmail = async (id) => {
+    const payroll = await Payroll.findById(id)
         .populate({
             path: "empId",
             populate: {
@@ -224,7 +219,7 @@ export const getTotalPaidSalaryByBranch = async (branchId) => {
         const totalPaidSalary = await Payroll.aggregate([
             {
                 $match: {
-                    empId: { $in: employeeIds },
+                    empId: {$in: employeeIds},
                     status: "Paid"
                 }
             },
