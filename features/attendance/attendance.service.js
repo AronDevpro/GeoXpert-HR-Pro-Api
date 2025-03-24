@@ -1,20 +1,10 @@
 import {Attendance} from "./attendance.schema.js";
-import {Contracts} from "../employeeContract/contract.schema.js";
 import {Holiday} from "../holiday/holiday.schema.js";
 import {isPointWithinRadius} from "geolib";
 import {Employee} from "../employee/employee.schema.js";
 import {OfficeShift} from "../officeShift/officeShift.schema.js";
 import mongoose from "mongoose";
-import {
-    addMonths,
-    differenceInBusinessDays,
-    endOfMonth,
-    endOfWeek,
-    startOfMonth,
-    startOfWeek,
-    subMonths,
-    subWeeks
-} from "date-fns";
+import {addMonths, differenceInBusinessDays, endOfMonth, startOfMonth, subMonths} from "date-fns";
 
 // get attendance by id
 export const getEmpAttendanceById = async (id, data) => {
@@ -83,6 +73,17 @@ export const getEmpAttendanceByBranchId = async (id, data) => {
         if (error.status) throw error;
         throw {status: 500, message: `Error fetching attendance: ${error.message}`};
     }
+}
+
+export const getTodayAttendance =async(id) =>{
+    const currentDate = new Date();
+    const startOfDay = new Date(currentDate.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(currentDate.setHours(23, 59, 59, 999));
+
+    return Attendance.findOne({
+        empId: id,
+        createdAt: {$gte: startOfDay, $lte: endOfDay},
+    });
 }
 
 // create attendance record

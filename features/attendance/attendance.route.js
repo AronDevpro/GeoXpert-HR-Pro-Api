@@ -1,7 +1,7 @@
 import express from 'express';
 import {
     getAllAttendanceByBranchId,
-    getAllAttendanceByEmpId, getAttendanceRate, getAttendanceRateByBranch,
+    getAllAttendanceByEmpId, getAttendanceRate, getAttendanceRateByBranch, getTodayCurrentAttendance,
     postAttendance,
     putAttendance
 } from "./attendance.controller.js";
@@ -10,6 +10,9 @@ const router = express.Router();
 
 // get all attendance by branch id
 router.get('/branch/:id', getAllAttendanceByBranchId);
+
+// get today attendance
+router.get('/today/:id', getTodayCurrentAttendance);
 
 // get branch attendance
 router.get('/branchRate/:id', getAttendanceRateByBranch);
