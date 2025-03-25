@@ -53,8 +53,9 @@ export const getAttendanceRateByBranch = async (req, res) => {
 export const getTodayCurrentAttendance = async (req, res) => {
     try {
         const id = req.params.id;
+        console.log(id)
         const attendanceRecords = await getTodayAttendance(id);
-        res.status(200).json(attendanceRecords);
+        res.status(201).json(attendanceRecords);
     } catch (error) {
         const status = error.status || 500;
         res.status(status).json({ message: error.message });

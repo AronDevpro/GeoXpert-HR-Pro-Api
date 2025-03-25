@@ -76,14 +76,19 @@ export const getEmpAttendanceByBranchId = async (id, data) => {
 }
 
 export const getTodayAttendance =async(id) =>{
+    console.log(id)
     const currentDate = new Date();
     const startOfDay = new Date(currentDate.setHours(0, 0, 0, 0));
     const endOfDay = new Date(currentDate.setHours(23, 59, 59, 999));
 
-    return Attendance.findOne({
+    const attendance = await Attendance.findOne({
         empId: id,
         createdAt: {$gte: startOfDay, $lte: endOfDay},
     });
+
+    console.log(attendance)
+
+    return attendance;
 }
 
 // create attendance record
@@ -136,9 +141,9 @@ export const createAttendanceRecord = async (id, data) => {
         {latitude: emp.branch.latitude, longitude: emp.branch.longitude}, // Office location
         emp.branch.radius // Radius in meters
     );
-    if (!isWithinRadius) {
-        throw new Error("You're out of the office location range.");
-    }
+    // if (!isWithinRadius) {
+    //     throw new Error("You're out of the office location range.");
+    // }
 
     const finalizeData = new Attendance({
         empId: id,

@@ -45,7 +45,7 @@ export const predictPromotion = async (id) => {
             DaysSinceStart: daysSinceStart,
         };
 
-        const response = await fetch('http://127.0.0.1:8000/promotion', {
+        const response = await fetch('http://127.0.0.1:7000/promotion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export const predictTurnover = async (id) => {
             DaysSinceStart: daysSinceStart,
         };
 
-        const response = await fetch('http://127.0.0.1:8000/turnover', {
+        const response = await fetch('http://127.0.0.1:7000/turnover', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

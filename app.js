@@ -30,6 +30,6 @@ app.use('/api/settings', routes.setting);
 app.use('/api/auth', routes.auth);
 
 // Start the server
-app.listen(3002, () => {
+app.listen(config.port, () => {
     console.log(`Server is running on port ${config.port}`);
 });
